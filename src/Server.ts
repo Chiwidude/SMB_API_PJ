@@ -1,8 +1,11 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable max-len */
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-import path from 'path';
 import helmet from 'helmet';
-
+import mongoose from 'mongoose';
+import dotdev from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
@@ -12,7 +15,7 @@ import logger from '@shared/Logger';
 const app = express();
 const { BAD_REQUEST } = StatusCodes;
 
-
+dotdev.config();
 
 /************************************************************************************
  *                              Set basic express settings
@@ -22,6 +25,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@cluster0.boam6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+}).then( ()=> console.log("connected to db")).catch(err => {console.error("Connection error", err.stack)});
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
