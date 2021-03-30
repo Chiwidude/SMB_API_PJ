@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@cluster0.boam6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@cluster0.boam6.mongodb.net/Smite_DB?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
