@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import mongoose from "mongoose";
 
-interface GuideDoc extends mongoose.Document{
+interface BuildDoc extends mongoose.Document{
     rating: string,
     title: string,
     gods: [],
@@ -10,7 +10,7 @@ interface GuideDoc extends mongoose.Document{
     date: string
 }
 
-interface IGuide {
+interface IBuild {
     rating: string,
     title: string,
     gods: [],
@@ -19,11 +19,11 @@ interface IGuide {
     date: string
 }
 
-interface guideModelInterface extends mongoose.Model<GuideDoc> {
-    build(item:IGuide): GuideDoc    
+interface buildModelInterface extends mongoose.Model<BuildDoc> {
+    build(item:IBuild): BuildDoc    
 }
 
-const guideSchema = new mongoose.Schema({
+const buildSchema = new mongoose.Schema({
     rating: {
         type: String
     },
@@ -45,12 +45,10 @@ const guideSchema = new mongoose.Schema({
     }
 })
 
-guideSchema.statics.build = (item: IGuide) => {
-    return new Guide(item);
+buildSchema.statics.build = (item: IBuild) => {
+    return new Build(item);
 }
 
-const Guide = mongoose.model<GuideDoc, guideModelInterface>('Guide', guideSchema);
+const Build = mongoose.model<BuildDoc, buildModelInterface>('Build', buildSchema);
 
-
-
-export {Guide};
+export {Build};

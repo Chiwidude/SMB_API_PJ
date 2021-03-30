@@ -1,23 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import StatusCodes from 'http-status-codes';
+import {Build} from '../types/build';
 import { Request, Response, Router } from 'express';
-import {getBuilds, addBuild, getBuild, deleteBuild, updateBuild} from '../entities/builds';
 import { getRandomInt } from '@shared/functions';
-import { paramMissingError, CustomRequest, notFoundItem} from '@shared/constants';
-import {Build} from "../types/types";
+import { paramMissingError, notFoundItem} from '@shared/constants';
+
 
 const router = Router();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT } = StatusCodes;
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 router.get("/", async (req: Request, res: Response) => {
-    const builds = await getBuilds();    
+    const builds = await Build.find({});    
     return res.status(OK).json({builds});
 })
 
 router.get("/:id", async (req:Request, res: Response) => {
-    const id : number = +req.params.id;
-    const build = await getBuild(id);
+    const id  = req.params.id;
+    const build = await Build.findById(id).exec();
     if(!build){
         return res.status(NOT_FOUND).json({
             error: notFoundItem,
@@ -25,7 +26,7 @@ router.get("/:id", async (req:Request, res: Response) => {
     }
     return res.status(OK).json({build});
 })
-router.post("/create", async (req: CustomRequest<Build>, res: Response) => {
+router.post("/create", async (req: Request, res: Response) => {
     const build = req.body;    
     build.id = getRandomInt();    
     if(!build){
@@ -33,23 +34,24 @@ router.post("/create", async (req: CustomRequest<Build>, res: Response) => {
             error: paramMissingError,
         });
     }
-    await addBuild(build);
+    const nwbuild = new Build(build);
+    await nwbuild.save();
     return res.status(CREATED).end();
 })
 
 router.delete("/delete/:id", async(req:Request, res: Response) => {
-    const id:number = +req.params.id;
-    const deleted = await deleteBuild(id);
+    const id = req.params.id;
+    const deleted = await Build.findByIdAndDelete(id).exec();
     if(!deleted){
         return res.status(NOT_FOUND).end();
     }
     return res.status(NO_CONTENT).end();
 })
 
-router.put("/:id", async (req:CustomRequest<Build>, res:Response)=> {
+router.put("/:id", async (req:Request, res:Response)=> {
     const updatedBuild = req.body;
-    const id:number = +req.params.id;
-    const updated = await updateBuild(id, updatedBuild);
+    const id = req.params.id;
+    const updated = await Build.findByIdAndUpdate(id, updatedBuild);
     if(!updated){
         return res.status(NOT_FOUND).end();
     }else{
