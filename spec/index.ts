@@ -43,7 +43,7 @@ if (options.testFile) {
     const testFile = options.testFile as string;
     find.file(testFile + '.spec.ts', './spec', (files) => {
         if (files.length === 1) {
-            jasmine.specFiles = [files[0]];
+            jasmine.specFiles = [files[0]];            
             jasmine.execute();
         } else {
             logger.err('Test file not found!');

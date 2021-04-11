@@ -29,7 +29,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@clu
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
-}).then( ()=> console.log("connected to db")).catch(err => {console.error("Connection error", err.stack); process.exit(1)});
+}).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
