@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import StatusCodes from 'http-status-codes';
 import {Guide} from '../types/guide';
@@ -30,7 +31,7 @@ router.post("/create", async (req: Request, res:Response)=> {
         });
     }    
     const nwguide = Guide.build(guide);
-   const result =  await nwguide.save();
+   const result =  await nwguide.save().catch(err => err);
    if(result === nwguide){
     return res.status(CREATED).end(); 
    }else{

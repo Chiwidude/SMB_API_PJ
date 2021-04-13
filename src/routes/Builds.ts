@@ -34,7 +34,7 @@ router.post("/create", async (req: Request, res: Response) => {
     }
     const nwbuild = new Build(build);    
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    const result = await nwbuild.save();
+    const result = await nwbuild.save().catch((err) => err);
     if(result === nwbuild){
         return res.status(CREATED).end();
     }else{

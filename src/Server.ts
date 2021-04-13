@@ -25,19 +25,36 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@cluster0.boam6.mongodb.net/Smite_DB?retryWrites=true&w=majority`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-}).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
+
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
+    mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@cluster0.boam6.mongodb.net/Smite_DB?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+}).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
 }
 
 // Security
 if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
+    mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@cluster0.boam6.mongodb.net/Smite_DB?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+}).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
+}
+
+if(process.env.NODE_ENV === 'test'){
+    mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSW}@cluster0.boam6.mongodb.net/Smite_Test?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+    }).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
 }
 
 // Add APIs

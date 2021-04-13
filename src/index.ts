@@ -8,3 +8,5 @@ const port = 4200;
 app.listen(port, () => {
     logger.info('Express server started on port: ' + port);
 });
+
+export default app;
