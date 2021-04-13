@@ -14,7 +14,7 @@ router.get("/", async (req: Request, res:Response)=> {
 router.get("/:id", async(req: Request, res:Response) => {
     const id = req.params.id;
     const guide = await Guide.findById(id).exec();
-    if(!guide){
+    if(guide === null){
         return res.status(NOT_FOUND).json({
             error: notFoundItem,
         })
@@ -22,7 +22,7 @@ router.get("/:id", async(req: Request, res:Response) => {
     return res.status(OK).json({guide});
 })
 
-router.post("/add", async (req: Request, res:Response)=> {
+router.post("/create", async (req: Request, res:Response)=> {
     const guide = req.body;
     if(!guide){
         return res.status(BAD_REQUEST).json({
@@ -30,14 +30,21 @@ router.post("/add", async (req: Request, res:Response)=> {
         });
     }    
     const nwguide = Guide.build(guide);
-    await nwguide.save();
-    return res.status(CREATED).end();    
+   const result =  await nwguide.save();
+   if(result === nwguide){
+    return res.status(CREATED).end(); 
+   }else{
+    return res.status(BAD_REQUEST).json({
+        error: paramMissingError,
+    });
+   }
+       
 })
 
 router.delete("/delete/:id", async(req:Request, res:Response)=> {
     const id = req.params.id;
     const deleted = await Guide.findByIdAndDelete(id).exec();
-    if(!deleted){
+    if(deleted === null){
         return res.status(NOT_FOUND).end();
     }
     return res.status(NO_CONTENT).end();
@@ -46,8 +53,8 @@ router.delete("/delete/:id", async(req:Request, res:Response)=> {
 router.put("/:id", async (req:Request, res:Response)=> {
     const updatedGuide = req.body;
     const id = req.params.id;
-    const updated = await Guide.findByIdAndUpdate(id, updatedGuide);
-    if(!updated){
+    const updated = await Guide.findByIdAndUpdate(id, updatedGuide).exec();
+    if(updated === null){
         return res.status(NOT_FOUND).end();
     }else{
         res.status(NO_CONTENT).end();

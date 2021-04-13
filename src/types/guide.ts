@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import mongoose from "mongoose";
 
-interface GuideDoc extends mongoose.Document{
+export interface GuideDoc extends mongoose.Document{
     rating: string,
     title: string,
     gods: [],

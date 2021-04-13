@@ -22,7 +22,7 @@ interface IBuild {
 interface buildModelInterface extends mongoose.Model<BuildDoc> {
     build(item:IBuild): BuildDoc    
 }
-
+const opts = { toJSON: { getters: true, virtuals: false } };
 const buildSchema = new mongoose.Schema({
     rating: {
         type: String
@@ -43,11 +43,11 @@ const buildSchema = new mongoose.Schema({
     date: {
         type: String
     }
-})
-
+},opts);
 buildSchema.statics.build = (item: IBuild) => {
     return new Build(item);
 }
+
 
 const Build = mongoose.model<BuildDoc, buildModelInterface>('Build', buildSchema);
 

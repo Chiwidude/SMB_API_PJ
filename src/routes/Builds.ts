@@ -10,15 +10,15 @@ import { paramMissingError, notFoundItem} from '@shared/constants';
 const router = Router();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT } = StatusCodes;
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {    
     const builds = await Build.find({});    
     return res.status(OK).json({builds});
-})
+});
 
 router.get("/:id", async (req:Request, res: Response) => {
     const id  = req.params.id;
     const build = await Build.findById(id).exec();
-    if(!build){
+    if(build === null){
         return res.status(NOT_FOUND).json({
             error: notFoundItem,
         })
@@ -32,10 +32,10 @@ router.post("/create", async (req: Request, res: Response) => {
             error: paramMissingError,
         });
     }
-    const nwbuild = new Build(build);
+    const nwbuild = new Build(build);    
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    const result = await nwbuild.save().catch(err => err);
-    if(!result){
+    const result = await nwbuild.save();
+    if(result === nwbuild){
         return res.status(CREATED).end();
     }else{
         return res.status(BAD_REQUEST).json({
@@ -57,7 +57,7 @@ router.delete("/delete/:id", async(req:Request, res: Response) => {
 router.put("/:id", async (req:Request, res:Response)=> {
     const updatedBuild = req.body;
     const id = req.params.id;
-    const updated = await Build.findByIdAndUpdate(id, updatedBuild);
+    const updated = await Build.findByIdAndUpdate(id, updatedBuild).exec();
     if(updated === null){
         return res.status(NOT_FOUND).end();
     }else{

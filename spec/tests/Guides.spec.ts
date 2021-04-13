@@ -1,31 +1,31 @@
 /* eslint-disable max-len */
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import needle from "needle";
 import dotdev from 'dotenv';
-import {BuildDoc} from '../../src/types/build';
+import {GuideDoc} from '../../src/types/guide';
 dotdev.config();
 
-// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-const url =  `http://localhost:${process.env.PORT}/api/v1/builds`;
+const url =  `http://localhost:${process.env.PORT}/api/v1/guides`;
 
-describe("Testing RestAPI Builds verbs responses", () =>{
-    describe("GET /builds", () => {
-        it("should return status code 200", (done)=>{
-            needle.get(url, (error, response) =>{
-                expect(response.statusCode).toBe(200);             
+describe("Testing restAPI Guides endpoints responses", () => {
+    describe("GET /guides", () =>{
+        it("Should return code 200", (done) => {
+            needle.get(url, (err, res)=> {
+                expect(res.statusCode).toBe(200);
                 done();
             });
         });
         it("Response should be an array of JSON objects", (done)=>{
             needle.get(url, (err, res)=> {                
-                expect(()=> {const builds = <BuildDoc[]>res.body;}).not.toThrow();
+                expect(()=> {const guides = <GuideDoc[]>res.body;}).not.toThrow();
                 done();
-            })
-        })
+            });
+        });
     });
     describe("POST /builds/create", () => {
         it("should return status code 201 when sent correct body", (done) =>{ 
-            needle.post(url+"/create", {"rating": "4.2", "title":"Sample Title Build testing", "gods":["Merlin"], "roles": ["mage"], "user": "chiwidude", "date":"12th april 2021"}, {json:true},
+            needle.post(url+"/create", {"rating": "4.5", "title":"Sample Guide Testing", "gods":["Ah-Puch"], "roles": ["mage"], "user": "chiwidude", "date":"12/04/2021"}, {json:true},
              (err, res) => {
                  expect(res.statusCode).toBe(201);
                  done();
@@ -41,7 +41,7 @@ describe("Testing RestAPI Builds verbs responses", () =>{
     });
     describe("DELETE /builds/delete/:id", () => {
         it("should delete the document from the db when a valid id is sent", (done) => {
-            needle.delete(url+"/delete/60725cfd4ccaac1c04cd670f", null, (err, res)=> {
+            needle.delete(url+"/delete/60752f48f8ba081c10a86597", null, (err, res)=> {
                 expect(res.statusCode).toBe(204);
                 done();
             });
@@ -56,7 +56,7 @@ describe("Testing RestAPI Builds verbs responses", () =>{
 
     describe("PUT /:id", () => {
         it("should update the document in the db when an existing id is sent", (done) => {
-            needle.put(url+"/606353caccce0209f8ea8dd4",{"gods":["Zeus, Tiamat"],"roles":["mage"],"rating":"4.5","title":"Sample Build 1","user":"Chiwidude","date":"30/03/2021"}, {json:true}
+            needle.put(url+"/6062927c7aba871250a7957c",{"gods":["Xbalanque, Hachiman"],"roles":["hunter"],"rating":"4.5","title":"Sample Guide 1","user":"Chiwidude","date":"12/04/2021"}, {json:true}
             , (err, res)=> {
                 expect(res.statusCode).toBe(204);
                 done();
@@ -71,4 +71,3 @@ describe("Testing RestAPI Builds verbs responses", () =>{
         })
     });
 });
-
