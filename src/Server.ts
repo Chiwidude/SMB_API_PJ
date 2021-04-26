@@ -11,10 +11,24 @@ import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
 import BaseRouter from './routes';
 import logger from '@shared/Logger';
+import cors from 'cors';
 
 const app = express();
-const { BAD_REQUEST } = StatusCodes;
-
+const { BAD_REQUEST, UNAUTHORIZED } = StatusCodes;
+const options: cors.CorsOptions = {
+    allowedHeaders: [
+      'Origin',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+      'X-Access-Token',
+      'authorization'
+    ],
+    credentials: true,
+    methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE', 
+    origin: 'http://localhost:3000',   
+    preflightContinue: false,
+  };
 dotdev.config();
 
 /************************************************************************************
@@ -24,7 +38,7 @@ dotdev.config();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-
+app.use(cors(options));
 
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
@@ -64,6 +78,8 @@ app.use('/api/v1', BaseRouter);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     logger.err(err, true);
+    if(err.name === 'UnauthorizedError') return res.status(UNAUTHORIZED).json({error:err.message})
+    
     return res.status(BAD_REQUEST).json({
         error: err.message,
     });

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+    api:
+        container_name: api
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - './SMB_API_PJ'
+            - '/SMB_API_PJ/node_modules'
+        ports:
+            - 7000:4200
