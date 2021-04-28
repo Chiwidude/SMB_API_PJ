@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import StatusCodes from 'http-status-codes';
 import { Request, Response, Router } from 'express';
-import {generateAToken} from './_helpers/jwt';
+import {generateAToken, authToken} from './_helpers/jwt';
 import { paramMissingError} from '@shared/constants';
 import {hash, genSalt, compare} from 'bcrypt'
 import {User} from '../types/user';
@@ -47,8 +47,11 @@ router.post("/login", async (req: Request, res: Response) => {
         id: user._id
     });    
     return res.status(OK).json({token, username:user.username }).end();
-})
+});
 
+router.get("/authorize", authToken, (req:Request, res:Response)=> {
+    return res.status(OK).end();
+});
 
 
 export default router;

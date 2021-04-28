@@ -4,7 +4,7 @@ import StatusCodes from 'http-status-codes';
 import { Request, Response, NextFunction} from 'express';
 const { FORBIDDEN} = StatusCodes;
 
-export const generateAToken = (username:Record<string,unknown>) => sign(username, process.env.keywrd as string, {expiresIn: '1d'});
+export const generateAToken = (username:Record<string,unknown>) => sign(username, process.env.keywrd as string, {expiresIn: '100s'});
 
 export const authToken = (req:Request, res:Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
