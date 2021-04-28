@@ -4,6 +4,7 @@ import StatusCodes from 'http-status-codes';
 import {Guide} from '../types/guide';
 import { Request, Response, Router } from 'express';
 import { paramMissingError, notFoundItem} from '@shared/constants';
+import {authToken} from './_helpers/jwt';
 const router = Router();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT } = StatusCodes;
 
@@ -23,7 +24,7 @@ router.get("/:id", async(req: Request, res:Response) => {
     return res.status(OK).json({guide});
 })
 
-router.post("/create", async (req: Request, res:Response)=> {
+router.post("/create", authToken, async (req: Request, res:Response)=> {
     const guide = req.body;
     if(!guide){
         return res.status(BAD_REQUEST).json({
@@ -42,7 +43,7 @@ router.post("/create", async (req: Request, res:Response)=> {
        
 })
 
-router.delete("/delete/:id", async(req:Request, res:Response)=> {
+router.delete("/delete/:id", authToken, async(req:Request, res:Response)=> {
     const id = req.params.id;
     const deleted = await Guide.findByIdAndDelete(id).exec();
     if(deleted === null){
@@ -51,7 +52,7 @@ router.delete("/delete/:id", async(req:Request, res:Response)=> {
     return res.status(NO_CONTENT).end();
 })
 
-router.put("/:id", async (req:Request, res:Response)=> {
+router.put("/:id", authToken, async (req:Request, res:Response)=> {
     const updatedGuide = req.body;
     const id = req.params.id;
     const updated = await Guide.findByIdAndUpdate(id, updatedGuide).exec();
