@@ -9,7 +9,8 @@ const router = Router();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT } = StatusCodes;
 
 router.get("/", async (req: Request, res:Response)=> {
-    const guides = await Guide.find({});
+    const user = req.query;
+    const guides = await Guide.find(user);
     return res.status(OK).json({guides});
 })
 

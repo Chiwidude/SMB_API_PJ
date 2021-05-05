@@ -3,9 +3,9 @@
 import StatusCodes from 'http-status-codes';
 import { Request, Response, Router } from 'express';
 import {generateAToken, authToken} from './_helpers/jwt';
-import { paramMissingError} from '@shared/constants';
 import {hash, genSalt, compare} from 'bcrypt'
 import {User} from '../types/user';
+import { paramMissingError, notFoundItem} from '@shared/constants';
 const router = Router();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND } = StatusCodes;
 
@@ -46,12 +46,23 @@ router.post("/login", async (req: Request, res: Response) => {
         name: user.name,
         id: user._id
     });    
-    return res.status(OK).json({token, username:user.username }).end();
+    return res.status(OK).json({token, username:user.username, id: user._id }).end();
 });
 
 router.get("/authorize", authToken, (req:Request, res:Response)=> {
     return res.status(OK).end();
 });
+
+router.get("/:id", authToken, async (req:Request, res:Response)=>{
+    const id = req.params.id;
+    const user = await User.findById(id).exec();
+    if(user === null){
+        return res.status(NOT_FOUND).json({
+            error: notFoundItem,
+        })
+    }
+    return res.status(OK).json({user});
+})
 
 
 export default router;

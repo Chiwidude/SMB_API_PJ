@@ -22,8 +22,9 @@ const options: cors.CorsOptions = {
       'Content-Type',
       'Accept',
       'X-Access-Token',
-      'authorization'
-    ],
+      'authorization',
+      'user'
+    ],exposedHeaders:['authorization'],
     credentials: true,
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE', 
     origin: '*',   

@@ -10,8 +10,9 @@ import {authToken} from './_helpers/jwt';
 const router = Router();
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT } = StatusCodes;
 
-router.get("/", async (req: Request, res: Response) => {    
-    const builds = await Build.find({});    
+router.get("/", async (req: Request, res: Response) => {
+    const user = req.query;    
+    const builds = await Build.find(user);    
     return res.status(OK).json({builds});
 });
 
@@ -24,7 +25,7 @@ router.get("/:id", async (req:Request, res: Response) => {
         })
     }
     return res.status(OK).json({build});
-})
+});
 router.post("/create", authToken, async (req: Request, res: Response) => {
     const build = req.body;        
     if(!build){
@@ -63,6 +64,7 @@ router.put("/:id", authToken, async (req:Request, res:Response)=> {
     }else{
         res.status(NO_CONTENT).end();
     }
-})
+});
+
 
 export default router;
