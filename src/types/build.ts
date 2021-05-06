@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 export interface BuildDoc extends mongoose.Document{
     rating: string,
     title: string,
+    description: string,
     gods: [],
     roles: [],
     user: string,
@@ -13,6 +14,7 @@ export interface BuildDoc extends mongoose.Document{
 interface IBuild {
     rating: string,
     title: string,
+    description: string,
     gods: [],
     roles: [],
     user: string,
@@ -30,6 +32,9 @@ const buildSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
+    }, 
+    description: {
+        type: String
     },
     gods: {
         type: []

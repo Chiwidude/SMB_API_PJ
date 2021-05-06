@@ -7,7 +7,7 @@ import {hash, genSalt, compare} from 'bcrypt'
 import {User} from '../types/user';
 import { paramMissingError, notFoundItem} from '@shared/constants';
 const router = Router();
-const { BAD_REQUEST, CREATED, OK, NOT_FOUND } = StatusCodes;
+const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT } = StatusCodes;
 
 router.post("/signup", async(req:Request, res:Response) => {
     const body = req.body;
@@ -62,6 +62,17 @@ router.get("/:id", authToken, async (req:Request, res:Response)=>{
         })
     }
     return res.status(OK).json({user});
+})
+
+router.put("/:id", authToken, async(req:Request, res:Response)=> {
+    const updatedUser = req.body;
+    const id = req.params.id;
+    const updated = await User.findByIdAndUpdate(id, updatedUser).exec();
+    if(updated === null){
+        return res.status(NOT_FOUND).end();
+    }else{
+        res.status(NO_CONTENT).end();
+    }
 })
 
 
