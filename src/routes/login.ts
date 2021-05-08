@@ -38,7 +38,7 @@ router.post("/login", async (req: Request, res: Response) => {
     const body = req.body;
     const user = await User.findOne({email: body.email}).exec();
     if(!user){
-        return res.status(BAD_REQUEST).json({error: "Invalid user or Password"});
+        return res.status(NOT_FOUND).json({error: "Invalid user or Password"});
     }
     const validPwd = await compare(body.password, user.password);
     if(!validPwd) return res.status(BAD_REQUEST).json({error: "Invalid user or Password"});

@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === 'development') {
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
-}).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
+}).then( ()=> console.log("connected to db dev")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
 }
 
 // Security
@@ -59,7 +59,7 @@ if (process.env.NODE_ENV === 'production') {
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
-}).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
+}).then( ()=> console.log("connected to db prod")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
 }
 
 if(process.env.NODE_ENV === 'test'){
@@ -68,7 +68,7 @@ if(process.env.NODE_ENV === 'test'){
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
-    }).then( ()=> console.log("connected to db")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
+    }).then( ()=> console.log("connected to db test")).catch((err: { stack: any; }) => {console.error("Connection error", err.stack); process.exit(1)});
 }
 
 // Add APIs

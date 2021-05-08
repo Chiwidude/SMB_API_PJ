@@ -1,18 +1,45 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import dotdev from 'dotenv';
 import request from "supertest";
 import app from "../../src/index";
 import {BuildDoc} from '../../src/types/build';
+import mongoose from 'mongoose';
 dotdev.config();
 
 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 
-describe("Testing RestAPI Builds verbs responses", () =>{
+/*describe("Testing RestAPI Builds verbs responses", () =>{
+    let Data = {
+        token:"",
+        username: "",
+        id:""
+    };
+    beforeAll(() =>{
+        request(app)
+        .post("/api/v1/users/signup")
+        .send({"name":"Tester", "username":"testmaster", "email":"tmaster@email.com","password":"12345", "description":"I'm the tester"})
+        .end((err, res) => {
+            request(app)
+            .post("/api/v1/users/login")
+            .send({"email":"tmaster@email.com", "password":"12345"})
+            .end((err,res) => {
+                if(res.status === 200){
+                    Data = res.body;
+                }     
+            })            
+        });
+    });
+    /*afterAll(async () => {
+        const res = await mongoose.connection.db.dropCollection("user");
+    }) 
     describe("GET /builds", () => {
+
         it("should return status code 200", (done)=>{
             request(app)
             .get("/api/v1/builds")
+            .set('authorization',`Bearer ${Data.token}`)
             .end((err, res) => {
                 expect(res.status).toBe(200);
                 done();
@@ -21,7 +48,7 @@ describe("Testing RestAPI Builds verbs responses", () =>{
         it("Response should be an array of JSON objects", (done)=>{
            
             request(app)
-            .get("/api/v1/builds")
+            .get("/api/v1/builds")            
             .end((err, res) => {
                 expect(()=> {
                     const build = <BuildDoc[]> res.body;
@@ -34,6 +61,7 @@ describe("Testing RestAPI Builds verbs responses", () =>{
         it("should return status code 201 when sent correct body", (done) =>{
             request(app).
             post("/api/v1/builds/create")
+            .set('authorization',`Bearer ${Data.token}`)
             .send({"rating": "4.2", "title":"Sample Title Build testing", "gods":["Merlin"], "roles": ["mage"], "user": "chiwidude", "date":"12th april 2021"})
             .end((err, res) =>{
                 expect(res.status).toBe(201);
@@ -88,5 +116,5 @@ describe("Testing RestAPI Builds verbs responses", () =>{
             })
         });
     });
-});
+});*/
 

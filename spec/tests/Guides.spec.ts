@@ -8,7 +8,7 @@ dotdev.config();
 
 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 
-describe("Testing RestAPI Guides verbs responses", () =>{
+/*describe("Testing RestAPI Guides verbs responses", () =>{
     describe("GET /guides", () => {
         it("should return status code 200", (done)=>{
             request(app)
@@ -88,5 +88,5 @@ describe("Testing RestAPI Guides verbs responses", () =>{
             })
         });
     });
-});
+});*/
 
