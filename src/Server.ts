@@ -13,6 +13,7 @@ import BaseRouter from './routes';
 import logger from '@shared/Logger';
 import cors from 'cors';
 
+
 const app = express();
 const { BAD_REQUEST, UNAUTHORIZED } = StatusCodes;
 const options: cors.CorsOptions = {
@@ -31,11 +32,9 @@ const options: cors.CorsOptions = {
     preflightContinue: false,
   };
 dotdev.config();
-
 /************************************************************************************
  *                              Set basic express settings
  ***********************************************************************************/
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
