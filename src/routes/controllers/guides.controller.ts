@@ -1,12 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import dbGuides from "../_helpers/GuidesDB";
-import { paramMissingError, notFoundItem} from '@shared/constants';
 import { Request, Response} from 'express';
 import client from "../../shared/redis";
 import StatusCodes from 'http-status-codes';
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT, INTERNAL_SERVER_ERROR  } = StatusCodes;
 
-export const getGuides = (req:Request, res:Response) => {
+export const getGuides = async(req:Request, res:Response) => {
     try {
         const user = req.query;
         if(user.user === undefined){
@@ -25,20 +25,11 @@ export const getGuides = (req:Request, res:Response) => {
             })
         }else{ //when user comes in url query
             const usr = typeof user.user !== 'string'? "" : user.user;
-            if(usr === user.user){
-                client.get("guides "+usr, async (err, reply) => {
-                    if(reply){
-                        const guides = JSON.parse(reply);
-                        return res.status(OK).json({guides});
-                    }else{
-                        const guides = await dbGuides.getGuides(user);                
-                    setTimeout(() => {                
-                        console.log("data from db");
-                        client.set("guides "+ usr, JSON.stringify(guides));
-                        return res.status(OK).json({guides});                
-                    }, 3000);
-                    }
-                })
+            if(usr === user.user){                                                                 
+                    const guides = await dbGuides.getGuides(user);                                                                          
+                    client.set("guides "+ usr, JSON.stringify(guides));
+                    return res.status(OK).json({guides});                
+                
             }
         }
     }catch(err){
@@ -57,7 +48,7 @@ export const getGuideWId = (req: Request, res: Response) => {
                 const guide = await dbGuides.getGuideWId(id);
                 if(!guide){
                     return res.status(NOT_FOUND).json({
-                        error: notFoundItem,
+                        error: "There's not such item in our database",
                     });
                 }                
                 setTimeout(() => {
@@ -81,7 +72,7 @@ export const createGuide = async (req: Request, res:Response) => {
      
     }catch(err){
         return res.status(BAD_REQUEST).json({
-            error: paramMissingError,
+            error: 'One or more of the required parameters was missing.',
         });
     }
 }

@@ -1,22 +1,15 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
-
-
-// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import { expect } from 'chai'
 import sinon from 'sinon'
-import dbGuides from '../../src/routes/_helpers/GuidesDB'
-import {createGuide, deleteGuide, getGuideWId, getGuides, updateGuide} from '../../src/routes/controllers/guides.controller'
+import dbBuilds from '../../src/routes/_helpers/BuildsDB'
+import {createBuild, deleteBuild, getBuildWId, getBuilds, updateBuild} from '../../src/routes/controllers/builds.controller'
 import 'mocha'
 
-describe('Guides controller functions', ()=> {
-    describe('Guide creation db', ()=> {
+describe('Builds controller functions', ()=> {
+    describe('Build creation db', ()=> {
         let status:any, json:any, request:any, response:any, body;
         beforeEach(()=> {
             status = sinon.stub();
@@ -24,11 +17,11 @@ describe('Guides controller functions', ()=> {
             response = {json,status};
             status.returns(response);            
         });          
-        body = {rating: "4.2", title:"Sample Title Guide testing", gods:["Merlin"], roles: ["mage"], user: "chiwidude", date:"12th april 2021"};
+        body = {rating: "4.2", title:"Sample Title Build testing", gods:["Merlin"], roles: ["mage"], user: "chiwidude", date:"12th april 2021"};
         const stubValue :any = {
             _id: "6092ead85c822b0718cff3c1",
             rating: "4.2", 
-            title:"Sample Title Guide testing",
+            title:"Sample Title Build testing",
              gods:["Merlin"], roles: ["mage"],
               user: "chiwidude", 
               date:"12th april 2021",
@@ -36,18 +29,18 @@ describe('Guides controller functions', ()=> {
         }
         request = {body}
         it('should create a new build', async () => {
-            const stub = sinon.stub(dbGuides, 'createGuide').returns(stubValue)
-            await createGuide(request, response)
+            const stub = sinon.stub(dbBuilds, 'createBuild').returns(stubValue)
+            await createBuild(request, response)
             expect(status.args[0][0]).to.equal(201);
             stub.restore();
         })
         body = {rating: "4.2", gods:["Merlin"], roles: ["mage"], user: "chiwidude", date:"12th april 2021"};        
         request = {body}
         it('should not save the build, because there\'s no title', async()=> {
-            const stub = sinon.stub(dbGuides, 'createGuide').callsFake(()=> {
+            const stub = sinon.stub(dbBuilds, 'createBuild').callsFake(()=> {
                 throw new Error('One or more of the required parameters was missing.');
             })
-            await createGuide(request, response)
+            await createBuild(request, response)
             expect(status.calledOnce).to.be.true;
             expect(status.args[0][0]).to.equal(400);
             expect(json.args[0][0].error).to.be.equal('One or more of the required parameters was missing.');
@@ -68,7 +61,7 @@ describe('Guides controller functions', ()=> {
         const stubValue :any = {
             _id: "6092ead85c822b0718cff3c1",
             rating: "4.2", 
-            title:"Sample Title Guide testing",
+            title:"Sample Title Build testing",
              gods:["Merlin"], roles: ["mage"],
               user: "chiwidude", 
               date:"12th april 2021",
@@ -76,10 +69,10 @@ describe('Guides controller functions', ()=> {
         }
         request = {body,params: {id:"6092ead85c822b0718cff3c1"}}
         it('should not save the build, because there\'s no title', async()=> {
-            const stub = sinon.stub(dbGuides, 'deleteGuide').callsFake(()=> {
+            const stub = sinon.stub(dbBuilds, 'deleteBuild').callsFake(()=> {
                 throw new Error("Internal Server Error");
             })
-            await deleteGuide(request, response)
+            await deleteBuild(request, response)
             expect(status.calledOnce).to.be.true;
             expect(status.args[0][0]).to.equal(500);
             expect(json.calledOnce).to.be.true;
@@ -88,15 +81,15 @@ describe('Guides controller functions', ()=> {
         });
         request = {body,params: {id:"6092ead85c822b0718cff3c1"}}
         it('should delete the build', async () => {
-            const stub = sinon.stub(dbGuides, 'deleteGuide').returns(stubValue)
-            await deleteGuide(request, response)
+            const stub = sinon.stub(dbBuilds, 'deleteBuild').returns(stubValue)
+            await deleteBuild(request, response)
             expect(status.args[0][0]).to.equal(204);
             stub.restore();
         })
     });
 
 
-    describe('getallGuides', ()=> {
+    describe('getallBuilds', ()=> {
         let  status:any, json:any, response:any, request:any;
         beforeEach(()=> {
             status = sinon.stub();
@@ -108,7 +101,7 @@ describe('Guides controller functions', ()=> {
         const stubValue :any = [{
             _id: "6092ead85c822b0718cff3c1",
             rating: "4.2", 
-            title:"Sample Title Guide testing",
+            title:"Sample Title Build testing",
              gods:["Merlin"], roles: ["mage"],
               user: "chiwidude", 
               date:"12th april 2021",
@@ -116,18 +109,18 @@ describe('Guides controller functions', ()=> {
         }] 
         request = {query:{user:''}};      
         it('should return an object with an array', async()=> {
-            const stub = sinon.stub(dbGuides, 'getGuides').returns(stubValue)
-            await getGuides(request, response)
+            const stub = sinon.stub(dbBuilds, 'getBuilds').returns(stubValue)
+            await getBuilds(request, response)
             expect(status.args[0][0]).to.equal(200);            
-            expect(json.args[0][0].guides).to.be.an('array')
+            expect(json.args[0][0].builds).to.be.an('array')
             stub.restore();
         });
         
         it('should not return an array', async () => {
-            const stub = sinon.stub(dbGuides, 'getGuides').callsFake(() => {
+            const stub = sinon.stub(dbBuilds, 'getBuilds').callsFake(() => {
                 throw new Error("Internal server error")
               })
-            await getGuides(request, response)
+            await getBuilds(request, response)
             expect(status.calledOnce).to.be.true;
             expect(status.args[0][0]).to.equal(500);
             expect(json.calledOnce).to.be.true;
@@ -136,7 +129,7 @@ describe('Guides controller functions', ()=> {
         })
     });
 
-    describe('update Guide', ()=> {
+    describe('update Build', ()=> {
         let  status:any, json:any, response:any, request:any, body:any;
         beforeEach(()=> {
             status = sinon.stub();
@@ -160,16 +153,16 @@ describe('Guides controller functions', ()=> {
         }
         request = {body, params:{id: "6092ead85c822b0718cff3c1" }};      
         it('should update the build', async()=> {
-            const stub = sinon.stub(dbGuides, 'updateGuide').returns(stubValue)
-            await updateGuide(request, response)
+            const stub = sinon.stub(dbBuilds, 'updateBuild').returns(stubValue)
+            await updateBuild(request, response)
             expect(status.args[0][0]).to.equal(204);
             stub.restore();
         });
         it('should not update the build', async () => {
-            const stub = sinon.stub(dbGuides, 'updateGuide').callsFake(() => {
+            const stub = sinon.stub(dbBuilds, 'updateBuild').callsFake(() => {
                 throw new Error("Internal server error")
               })
-            await updateGuide(request, response)
+            await updateBuild(request, response)
             expect(status.calledOnce).to.be.true;
             expect(status.args[0][0]).to.equal(500);
             expect(json.calledOnce).to.be.true;

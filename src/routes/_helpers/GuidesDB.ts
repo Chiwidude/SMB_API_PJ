@@ -13,7 +13,7 @@ const getGuides = async (user:any) => {
 
 const getGuideWId = async (id:string) => {
     try{
-        const guide = Guide.findById(id).exec();
+        const guide = await Guide.findById(id).exec();
         return guide;
     }catch(err:any){
         return err;
@@ -32,7 +32,7 @@ const createGuide = async (nGuide :any) =>{
 
 const deleteGuide = async (id: string) =>{
     try {
-        const deleted = Guide.findByIdAndDelete(id).exec();
+        const deleted = await Guide.findByIdAndDelete(id).exec();
         return deleted;   
     }catch(err:any){
         return err;

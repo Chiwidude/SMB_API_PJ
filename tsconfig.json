@@ -83,7 +83,7 @@
   "include": [
     "src/**/*.ts",
     "spec/**/*.ts"
-  ],
+, "spec/tests/Builds.spec.ts"  ],
   "exclude": [
     "src/public/"
   ]

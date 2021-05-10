@@ -12,7 +12,7 @@ const getBuilds = async (user:any) => {
 
 const getBuildWId = async (id:string) => {
     try{
-        const build = Build.findById(id).exec();
+        const build = await Build.findById(id).exec();
         return build;
     }catch(err:any){
         return err;
@@ -31,7 +31,7 @@ const createBuild = async (nbuild : any) =>{
 
 const deleteBuild = async (id: string) =>{
     try {
-        const deleted = Build.findByIdAndDelete(id).exec();
+        const deleted = await Build.findByIdAndDelete(id).exec();
         return deleted;   
     }catch(err:any){
         return err;

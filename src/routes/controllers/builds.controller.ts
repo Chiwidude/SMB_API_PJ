@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import dbBuilds from "../_helpers/BuildsDB";
-import { paramMissingError, notFoundItem} from '@shared/constants';
 import { Request, Response} from 'express';
 import client from "../../shared/redis";
 import StatusCodes from 'http-status-codes';
 const { BAD_REQUEST, CREATED, OK, NOT_FOUND, NO_CONTENT, INTERNAL_SERVER_ERROR  } = StatusCodes;
 
-export const getBuilds = (req:Request, res:Response) => {
+export const getBuilds = async(req:Request, res:Response) => {
     try {
         const user = req.query;
         if(user.user === undefined){
@@ -25,20 +24,12 @@ export const getBuilds = (req:Request, res:Response) => {
             })
         }else{ //when user comes in url query
             const usr = typeof user.user !== 'string'? "" : user.user;
-            if(usr === user.user){
-                client.get("builds "+usr, async (err, reply) => {
-                    if(reply){
-                        const builds = JSON.parse(reply);
-                        return res.status(OK).json({builds});
-                    }else{
-                        const builds = await dbBuilds.getBuilds(user);                
-                    setTimeout(() => {                
-                        console.log("data from db");
-                        client.set("builds "+ usr, JSON.stringify(builds));
-                        return res.status(OK).json({builds});                
-                    }, 3000);
-                    }
-                })
+            if(usr === user.user){                                    
+                const builds = await dbBuilds.getBuilds(user);                   
+                    console.log("data from db");
+                    client.set("builds "+ usr, JSON.stringify(builds));
+                    return res.status(OK).json({builds});
+                
             }
         }
     }catch(err){
@@ -57,7 +48,7 @@ export const getBuildWId = (req: Request, res: Response) => {
                 const build = await dbBuilds.getBuildWId(id);
                 if(!build){
                     return res.status(NOT_FOUND).json({
-                        error: notFoundItem,
+                        error:"There's not such item in our database",
                     });
                 }                
                 setTimeout(() => {
@@ -81,7 +72,7 @@ export const createBuild = async (req: Request, res:Response) => {
      
     }catch(err){
         return res.status(BAD_REQUEST).json({
-            error: paramMissingError,
+            error: 'One or more of the required parameters was missing.',
         });
     }
 }
