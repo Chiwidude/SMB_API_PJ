@@ -13,7 +13,7 @@ router.post("/signup", async(req:Request, res:Response) => {
     const body = req.body;
 
     if(body === null){
-        return res.status(NOT_FOUND).json({
+        return res.status(BAD_REQUEST).json({
             error: "no data was sent",
         })
     }
