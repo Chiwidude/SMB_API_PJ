@@ -10,7 +10,7 @@ client.on("connect", function(error) {
 });
 
 client.on("ready", function(error) {
-    console.log("Redi server ready to use");
+    console.log("Redis server ready to use");
     });
     
     client.on("error", function(error) {

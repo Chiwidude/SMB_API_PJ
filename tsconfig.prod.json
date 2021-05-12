@@ -6,6 +6,9 @@
   "exclude": [
     "spec",
     "src/**/*.mock.ts",
-    "src/public/"
+    "src/public/",
+    ".dockerignore",
+    "docker-compose.yml",
+    "DockerFile"
   ]
 }
